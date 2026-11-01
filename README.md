@@ -111,6 +111,37 @@ Copy a file in `themes/`. A theme needs the palette keys `ground primary seconda
 `lighting` or `atmosphere` is converted to a `Color3`. The `flavor` strings
 (`title`, `intro`, `hazardName`, `collectible`, `finishText`) appear in-game.
 
+## Trend data (YouTube + Twitch)
+
+`trends` collects what's popular right now, as groundwork for trend-driven themes
+(see [docs/plans/trend-themes.md](docs/plans/trend-themes.md)).
+
+Put the keys in a `.env` file in the repo root (gitignored, loaded by `trends`).
+Variables already set in your shell take precedence.
+
+```sh
+# .env
+PIGTROUGH_YOUTUBE_KEY=...            # Google Cloud project with "YouTube Data API v3" enabled -> API key
+PIGTROUGH_TWITCH_CLIENT_ID=...       # dev.twitch.tv/console -> register an app (Client Type: Confidential)
+PIGTROUGH_TWITCH_CLIENT_SECRET=...
+
+python -m pigtrough trends                                # US, Gaming chart + "roblox" search, Roblox streams
+python -m pigtrough trends --regions US,GB,BR --youtube-search "roblox,obby" --twitch-games "Roblox,Minecraft"
+```
+
+| Source | Calls (each one is logged) | Quota |
+| --- | --- | --- |
+| YouTube | `videos.list` most-popular chart (Gaming category) per region; per search term, `search.list` (most-viewed in the last 7 days) and then `videos.list` for tags/stats | chart 1 unit, search 101 units; 10,000/day |
+| Twitch | app token, `games/top` (top 100), `games` (name → id), `streams` per category, most-watched first | 800 points/min |
+
+Results go to `trends/logs/trends-<utc time>.jsonl` (gitignored). The log gets
+one line **as each call finishes**: params, status, timing, and the parsed
+videos/streams. Keys, secrets and tokens are never written. A final `summary`
+line ranks tags, hashtags and title terms per platform, plus terms seen on both.
+Each item is weighted by log views/viewers and each channel counts once per
+term, so tag spam and single viral videos don't take over. A failed call is
+logged and the run continues; YouTube stops early once the daily quota is used up.
+
 ## Rojo `.model.json` notes (verified against Rojo 7.7)
 
 - Implicit values work for `Vector3` `[x,y,z]`, `Color3` `[r,g,b]` (0–1), enums (`"Neon"`), bools, numbers, strings and `Tags` (`["A","B"]`).

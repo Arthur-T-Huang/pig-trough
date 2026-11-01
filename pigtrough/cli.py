@@ -1,4 +1,4 @@
-"""pigtrough command line: list | new | build | check | serve."""
+"""pigtrough command line: list | new | build | check | serve | trends."""
 
 from __future__ import annotations
 
@@ -140,6 +140,49 @@ def cmd_serve(args) -> int:
             rojo.terminate()
 
 
+def _csv(value: str) -> list[str]:
+    return [v.strip() for v in value.split(",") if v.strip()]
+
+
+def cmd_trends(args) -> int:
+    from .trends import TrendLog, TwitchSource, YouTubeSource, collect, default_log_path, format_summary, load_env_file
+    from .trends.twitch import ENV_ID, ENV_SECRET
+    from .trends.youtube import ENV_KEY
+
+    load_env_file()
+    factories = {
+        "youtube": (lambda: YouTubeSource.from_env(regions=_csv(args.regions), chart_pages=args.youtube_pages,
+                                                   searches=_csv(args.youtube_search)), ENV_KEY),
+        "twitch": (lambda: TwitchSource.from_env(games=_csv(args.twitch_games), stream_pages=args.twitch_pages),
+                   f"{ENV_ID} and {ENV_SECRET}"),
+    }
+    wanted = _csv(args.sources)
+    unknown = [s for s in wanted if s not in factories]
+    if unknown:
+        raise ValueError(f"Unknown trend source(s) {', '.join(unknown)}; available: {', '.join(factories)}")
+    sources, skipped = [], {}
+    for name in wanted:
+        make, needs = factories[name]
+        source = make()
+        if source:
+            sources.append(source)
+        else:
+            skipped[name] = f"set {needs}"
+            print(f"[trends] skipping {name}: set {needs}", file=sys.stderr)
+    if not sources:
+        print("error: no trend source has credentials configured", file=sys.stderr)
+        return 1
+    log = TrendLog(args.log or default_log_path())
+    print(f"[trends] logging to {log.path}")
+    summary = collect(sources, log, top=args.top, skipped=skipped)
+    print(format_summary(summary))
+    print(f"[trends] full results: {log.path}")
+    found = summary.get("youtube", {}).get("videos", 0) + summary.get("twitch", {}).get("streams", 0)
+    if not found:
+        print("error: every source came back empty; see the failed calls in the log", file=sys.stderr)
+    return 0 if found else 1
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="pigtrough", description="Generate Roblox games and sync them with Rojo.")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -171,6 +214,18 @@ def main(argv: list[str] | None = None) -> int:
             p.add_argument("--port", type=int)
             p.add_argument("--no-rojo", action="store_true", help="only regenerate; run rojo yourself")
         p.set_defaults(func=func)
+
+    p = sub.add_parser("trends", help="log trending videos, streams, tags and topics from YouTube and Twitch")
+    p.add_argument("--sources", default="youtube,twitch", help="comma list (default: youtube,twitch)")
+    p.add_argument("--log", type=Path, help="JSONL log file (default: trends/logs/trends-<utc time>.jsonl)")
+    p.add_argument("--regions", default="US", help="YouTube region codes, comma list (default: US)")
+    p.add_argument("--youtube-pages", type=int, default=1, help="pages of 50 from the Gaming chart per region")
+    p.add_argument("--youtube-search", default="roblox",
+                   help="comma list of searches for the week's most-viewed videos, 100 quota units each; '' to skip")
+    p.add_argument("--twitch-games", default="Roblox", help="Twitch categories to read live streams from")
+    p.add_argument("--twitch-pages", type=int, default=3, help="pages of 100 streams per category")
+    p.add_argument("--top", type=int, default=15, help="entries per ranked list in the summary")
+    p.set_defaults(func=cmd_trends)
 
     args = parser.parse_args(argv)
     try:

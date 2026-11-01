@@ -6,3 +6,6 @@ __pycache__/
 *.rbxlx
 *.rbxl.lock
 *.rbxlx.lock
+
+trends/logs/
+.env
