@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pigtrough"
+version = "0.1.0"
+description = "Generate Roblox games as Rojo projects and live-sync them into Roblox Studio"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+pigtrough = "pigtrough.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["pigtrough*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.luau", "**/*.luau"]

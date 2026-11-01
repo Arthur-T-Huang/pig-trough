@@ -1,0 +1,16 @@
+{
+  "name": "Candy Collector",
+  "genre": "collector",
+  "theme": "candy",
+  "seed": 2024,
+  "params": {
+    "arenaSize": 220.0,
+    "platforms": 10,
+    "props": 24,
+    "hazardPatches": 4,
+    "coinCount": 30,
+    "coinRespawnSeconds": 5.0,
+    "roundSeconds": 120,
+    "intermissionSeconds": 15
+  }
+}

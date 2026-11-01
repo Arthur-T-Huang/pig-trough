@@ -1,0 +1,39 @@
+{
+  "name": "space",
+  "displayName": "Deep Space",
+  "palette": {
+    "ground": "#1c2030",
+    "primary": "#4a5578",
+    "secondary": "#2a3046",
+    "accent": "#3cf2ff",
+    "hazard": "#ff2a6d",
+    "checkpoint": "#5cff9d",
+    "goal": "#b98cff"
+  },
+  "materials": {
+    "ground": "DiamondPlate",
+    "platform": "Metal",
+    "accent": "Neon",
+    "hazard": "ForceField",
+    "checkpoint": "Neon",
+    "goal": "Neon",
+    "truss": "Metal"
+  },
+  "lighting": {
+    "ClockTime": 0,
+    "Brightness": 1,
+    "Ambient": "#2a3050",
+    "OutdoorAmbient": "#30365a",
+    "FogColor": "#05060f",
+    "FogStart": 0,
+    "FogEnd": 1200
+  },
+  "atmosphere": { "Density": 0.1, "Haze": 0, "Color": "#202850", "Decay": "#101020", "Glare": 0 },
+  "flavor": {
+    "title": "Orbit Run",
+    "intro": "Mind the plasma.",
+    "hazardName": "Plasma",
+    "collectible": "Stardust",
+    "finishText": "DOCKED"
+  }
+}

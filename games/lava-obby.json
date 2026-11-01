@@ -1,0 +1,11 @@
+{
+  "name": "Lava Obby",
+  "genre": "obby",
+  "theme": "volcano",
+  "seed": 1337,
+  "params": {
+    "stages": 12,
+    "difficulty": "medium",
+    "startHeight": 40.0
+  }
+}

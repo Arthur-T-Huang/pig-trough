@@ -1,0 +1,39 @@
+{
+  "name": "volcano",
+  "displayName": "Volcano",
+  "palette": {
+    "ground": "#2b201c",
+    "primary": "#5a3a2e",
+    "secondary": "#3d2b25",
+    "accent": "#ff9a3c",
+    "hazard": "#ff3c00",
+    "checkpoint": "#4fbf6a",
+    "goal": "#ffd23f"
+  },
+  "materials": {
+    "ground": "Basalt",
+    "platform": "Slate",
+    "accent": "Neon",
+    "hazard": "CrackedLava",
+    "checkpoint": "SmoothPlastic",
+    "goal": "Neon",
+    "truss": "Metal"
+  },
+  "lighting": {
+    "ClockTime": 19.2,
+    "Brightness": 1.5,
+    "Ambient": "#3a1a10",
+    "OutdoorAmbient": "#5a2a18",
+    "FogColor": "#40140a",
+    "FogStart": 0,
+    "FogEnd": 900
+  },
+  "atmosphere": { "Density": 0.38, "Haze": 2.2, "Color": "#c2552a", "Decay": "#5a1e0e", "Glare": 0.3 },
+  "flavor": {
+    "title": "Escape the Volcano",
+    "intro": "The lava is rising. Climb!",
+    "hazardName": "Lava",
+    "collectible": "Embers",
+    "finishText": "ESCAPED!"
+  }
+}

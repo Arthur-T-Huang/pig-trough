@@ -1,0 +1,39 @@
+{
+  "name": "candy",
+  "displayName": "Candy Land",
+  "palette": {
+    "ground": "#ffd6e8",
+    "primary": "#ff7eb6",
+    "secondary": "#8fd3ff",
+    "accent": "#fff06a",
+    "hazard": "#7a2cff",
+    "checkpoint": "#7cf2a6",
+    "goal": "#ff4f8b"
+  },
+  "materials": {
+    "ground": "SmoothPlastic",
+    "platform": "SmoothPlastic",
+    "accent": "Glass",
+    "hazard": "Neon",
+    "checkpoint": "SmoothPlastic",
+    "goal": "Neon",
+    "truss": "Plastic"
+  },
+  "lighting": {
+    "ClockTime": 13,
+    "Brightness": 2.5,
+    "Ambient": "#a07090",
+    "OutdoorAmbient": "#c8a0b8",
+    "FogColor": "#ffe0f0",
+    "FogStart": 0,
+    "FogEnd": 1500
+  },
+  "atmosphere": { "Density": 0.25, "Haze": 1, "Color": "#ffd0e8", "Decay": "#ff9ac8", "Glare": 0 },
+  "flavor": {
+    "title": "Sugar Rush",
+    "intro": "Don't fall in the grape goo!",
+    "hazardName": "GrapeGoo",
+    "collectible": "Gumdrops",
+    "finishText": "SWEET!"
+  }
+}
